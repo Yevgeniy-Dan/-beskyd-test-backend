@@ -18,10 +18,12 @@ const recordSchema = new Schema({
   status: {
     type: String,
     required: [true, "Please select a status"],
+    enum: ["Open", "Close", "Pending"],
   },
   role: {
     type: String,
     required: [true, "Please select a role"],
+    enum: ["Customer", "Business", "Admin"],
   },
 });
 

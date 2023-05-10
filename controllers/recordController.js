@@ -1,4 +1,5 @@
 const asyncHandler = require("express-async-handler");
+const { validationResult } = require("express-validator");
 
 const Record = require("../models/recordModel");
 
@@ -14,6 +15,15 @@ const getRecords = asyncHandler(async (req, res) => {
 // @route   POST /api/records
 // @access  Public
 const setRecord = asyncHandler(async (req, res) => {
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    const error = new Error(errors.array()[0].msg);
+    error.data = errors.array();
+    error.statusCode = 422;
+    throw error;
+  }
+
   const { name, amount, address, status, role } = req.body;
 
   const record = await Record.create({
@@ -30,6 +40,15 @@ const setRecord = asyncHandler(async (req, res) => {
 // @route   PUT /api/record/:id
 // @access  Public
 const updateRecord = asyncHandler(async (req, res) => {
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    const error = new Error(errors.array()[0].msg);
+    error.data = errors.array();
+    error.statusCode = 422;
+    throw error;
+  }
+
   const record = await Record.findById(req.params.id);
 
   if (!record) {
