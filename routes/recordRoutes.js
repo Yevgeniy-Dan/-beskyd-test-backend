@@ -8,17 +8,22 @@ const {
   updateRecord,
 } = require("../controllers/recordController");
 
-router
-  .route("/")
-  .get(getRecords)
-  .post(setRecord, [
-    body("name").trim().not().isEmpty(),
-    body("address").trim().not().isEmpty(),
-    body("role").trim().isIn(["Customer", "Business", "Admin"]),
-    body("status").trim().isIn(["Open", "Close", "Pending"]),
-    body("amount").isFloat({ min: 0 }),
-  ]);
+const validateFields = [
+  body("name").trim().not().isEmpty().withMessage("Please add a name"),
+  body("address").trim().not().isEmpty().withMessage("Please add an address"),
+  body("role")
+    .trim()
+    .isIn(["Customer", "Business", "Admin"])
+    .withMessage("Please select a role"),
+  body("status")
+    .trim()
+    .isIn(["Open", "Close", "Pending"])
+    .withMessage("Please select a status"),
+  body("amount").isFloat({ min: 0 }).withMessage("Please add an amount"),
+];
 
-router.put("/:id", updateRecord);
+router.route("/").get(getRecords).post(validateFields, setRecord);
+
+router.put("/:id", validateFields, updateRecord);
 
 module.exports = router;
