@@ -33,7 +33,7 @@ const setRecord = asyncHandler(async (req, res) => {
     role,
     status,
   });
-  res.status(200).json({ message: `Success`, record: record });
+  res.status(200).json(record);
 });
 
 // @desc    Udpate record
@@ -61,7 +61,7 @@ const updateRecord = asyncHandler(async (req, res) => {
     req.body,
     { new: true }
   );
-  res.status(200).json({ message: `Success`, updatedRecord: updatedRecord });
+  res.status(200).json(updatedRecord);
 });
 
 module.exports = {
